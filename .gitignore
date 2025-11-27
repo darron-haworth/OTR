@@ -36,11 +36,23 @@ coverage/
 .nyc_output/
 
 # Mobile
+# iOS
 mobile/ios/Pods/
 mobile/ios/build/
+mobile/ios/*.xcworkspace/xcuserdata/
+mobile/ios/*.xcodeproj/xcuserdata/
+mobile/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+mobile/ios/DerivedData/
+
+# Android
 mobile/android/app/build/
 mobile/android/.gradle/
 mobile/android/local.properties
+mobile/android/app/release/
+mobile/android/.idea/
+mobile/android/*.iml
+
+# Build artifacts
 *.apk
 *.aab
 *.ipa

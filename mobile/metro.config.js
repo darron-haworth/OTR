@@ -20,11 +20,11 @@ const config = {
   resolver: {
     alias: {
       '@': './src',
-      '@components': './src/components',
-      '@screens': './src/screens',
-      '@services': './src/services',
-      '@hooks': './src/hooks',
-      '@utils': './src/utils',
+      '@components': './components',
+      '@screens': './screens',
+      '@services': './services',
+      '@hooks': './hooks',
+      '@utils': './utils',
       '@types': './src/types',
     },
   },

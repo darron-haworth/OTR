@@ -1,57 +1,5 @@
 {
   "name": "OurTimeRecovered",
-  "displayName": "Our Time Recovered",
-  "expo": {
-    "name": "Our Time Recovered",
-    "slug": "otr-milestone-tracker",
-    "version": "0.1.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ourtimerecovered.app",
-      "buildNumber": "1",
-      "infoPlist": {
-        "NSFaceIDUsageDescription": "Use Face ID to securely access your recovery data"
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.ourtimerecovered.app",
-      "versionCode": 1,
-      "permissions": [
-        "USE_BIOMETRIC",
-        "USE_FINGERPRINT"
-      ]
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      [
-        "react-native-keychain",
-        {
-          "faceID": true
-        }
-      ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "your-project-id"
-      }
-    }
-  }
+  "displayName": "Our Time Recovered"
 }
 

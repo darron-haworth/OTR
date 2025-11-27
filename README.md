@@ -200,17 +200,27 @@ OTR/
    npm install
    ```
 
-3. For iOS (macOS only):
+3. **For Android:**
+   ```bash
+   # Make sure Android SDK is configured in android/local.properties
+   # Start Metro bundler (in a separate terminal):
+   npm start
+   
+   # Run the app:
+   npm run android
+   ```
+   
+   **Note:** The Android project is initialized and ready. Ensure you have:
+   - Android SDK installed and configured
+   - Android emulator running or device connected via USB
+   - `android/local.properties` file with `sdk.dir` set
+
+4. **For iOS (macOS only):**
    ```bash
    cd ios
    pod install
    cd ..
    npm run ios
-   ```
-
-4. For Android:
-   ```bash
-   npm run android
    ```
 
 5. Run tests:
