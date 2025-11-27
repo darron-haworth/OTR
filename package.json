@@ -1,0 +1,21 @@
+{
+  "name": "otr-monorepo",
+  "version": "0.1.0",
+  "description": "OTR Milestone Tracker - Monorepo",
+  "private": true,
+  "scripts": {
+    "generate:types": "ts-node scripts/generate-types.ts",
+    "generate:api": "ts-node scripts/generate-api-client.ts",
+    "generate:all": "npm run generate:types && npm run generate:api",
+    "postinstall": "npm install --prefix backend && npm install --prefix mobile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

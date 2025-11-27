@@ -1,0 +1,40 @@
+name: Mobile CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/mobile-ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/mobile-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: mobile/package.json
+      
+      - name: Install dependencies
+        working-directory: ./mobile
+        run: npm ci
+      
+      - name: Run linter
+        working-directory: ./mobile
+        run: npm run lint
+      
+      - name: Run tests
+        working-directory: ./mobile
+        run: npm test
+

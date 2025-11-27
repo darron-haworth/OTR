@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Build backend
+        working-directory: ./backend
+        run: |
+          npm ci
+          npm run build
+      
+      - name: Build mobile
+        working-directory: ./mobile
+        run: |
+          npm ci
+          npm run build
+
