@@ -103,6 +103,10 @@ OTR/
 │   │   ├── module-overview.md
 │   │   ├── diagrams/
 │   │   └── flows/
+│   ├── design/              # Design & brand specifications
+│   │   ├── android/         # Android brand assets & theme
+│   │   ├── ios/             # iOS brand assets & theme
+│   │   └── shared/          # Shared design tokens
 │   └── testing/
 │       ├── backend-tests.md
 │       ├── mobile-tests.md
