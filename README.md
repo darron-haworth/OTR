@@ -12,17 +12,20 @@ For detailed project information, see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OV
 
 ### Backend
 - **Runtime**: Node.js with TypeScript
-- **Framework**: Express.js (or similar)
-- **Database**: TBD (Firebase/Firestore or PostgreSQL)
+- **Framework**: Express.js
+- **Database**: Firebase Firestore
 - **Authentication**: JWT-based authentication
+- **Validation**: Zod schemas (auto-generated from specs)
 - **Testing**: Jest, Supertest
 
 ### Mobile
 - **Framework**: React Native
 - **Language**: TypeScript
-- **State Management**: Redux Toolkit or Zustand
+- **State Management**: Zustand
 - **Navigation**: React Navigation v6
-- **Local Storage**: React Native Async Storage / Encrypted Storage
+- **Local Storage**: React Native Async Storage with encryption
+- **Encryption**: AES-256-GCM via react-native-keychain
+- **API Client**: Auto-generated from endpoint specs
 - **Testing**: Jest, React Native Testing Library, Detox
 
 ### Development Tools
@@ -30,6 +33,8 @@ For detailed project information, see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OV
 - **CI/CD**: GitHub Actions
 - **Code Quality**: ESLint, Prettier
 - **Documentation**: Markdown
+- **Type Generation**: Automated scripts (specs → TypeScript)
+- **API Client Generation**: Automated scripts (specs → API client)
 
 ## Folder Structure
 
@@ -40,13 +45,15 @@ OTR/
 │   │   ├── api/            # API layer
 │   │   │   ├── controllers/
 │   │   │   ├── routes/
-│   │   │   └── middleware/
+│   │   │   ├── middleware/
+│   │   │   ├── validators/ # Auto-generated Zod schemas
+│   │   │   └── dto/
 │   │   ├── core/           # Core functionality
 │   │   │   ├── config/
 │   │   │   ├── logging/
 │   │   │   └── security/
 │   │   ├── domain/         # Domain logic
-│   │   │   ├── entities/
+│   │   │   ├── entities/   # Auto-generated from specs
 │   │   │   ├── repositories/
 │   │   │   └── services/
 │   │   ├── app.ts
@@ -63,8 +70,17 @@ OTR/
 │   ├── components/
 │   ├── screens/
 │   ├── services/
-│   │   ├── api/
-│   │   └── client.ts
+│   │   ├── api/            # Auto-generated API client
+│   │   ├── backup/         # Backup service
+│   │   ├── encryption/     # Encryption service
+│   │   ├── storage/       # Local storage service
+│   │   ├── sync/          # Cloud sync service
+│   │   ├── client.ts      # API client config
+│   │   └── index.ts       # Service exports
+│   ├── src/
+│   │   └── types/         # Auto-generated types
+│   │       ├── api/       # API request/response types
+│   │       └── entities/  # Entity types
 │   ├── hooks/
 │   ├── assets/
 │   └── utils/
@@ -94,9 +110,20 @@ OTR/
 │
 ├── docs/                    # Project documentation
 │   ├── PROJECT_OVERVIEW.md
+│   ├── PROJECT_ASSESSMENT.md
 │   ├── TECHNICAL_REQUIREMENTS.md
 │   ├── DEVELOPMENT_GUIDELINES.md
-│   └── SECURITY_IMPLEMENTATION.md
+│   ├── SECURITY_IMPLEMENTATION.md
+│   ├── ARCHITECTURE_DATA_STORAGE.md
+│   └── CURSOR_PROMPTS.md
+│
+├── scripts/                 # Type generation scripts
+│   ├── generate-types.ts    # Generate entity types from specs
+│   ├── generate-api-client.ts # Generate API clients from specs
+│   └── README.md
+│
+├── package.json             # Root package.json (type generation scripts)
+├── tsconfig.json            # Root TypeScript config
 │
 └── .github/
     ├── workflows/
@@ -115,6 +142,23 @@ OTR/
   - React Native CLI
   - iOS: Xcode (macOS only)
   - Android: Android Studio
+
+### Initial Setup
+
+1. **Install root dependencies** (for type generation scripts):
+   ```bash
+   npm install
+   ```
+
+2. **Generate types from specs** (run this after updating specs):
+   ```bash
+   npm run generate:all
+   ```
+   
+   This will:
+   - Generate TypeScript entity types from `/specs/data-models/entities/`
+   - Generate API client functions from `/specs/api/endpoints/`
+   - Generate Zod validation schemas for backend
 
 ### Backend Setup
 
@@ -174,31 +218,44 @@ OTR/
    npm test
    ```
 
-## Spec-Driven Development Workflow (Cursor-Specific)
+## Spec-Driven Development Workflow
 
-This project follows a **Spec-Driven Development (SDD)** approach, where specifications are written before implementation. This workflow is optimized for use with Cursor AI.
+This project follows a **Spec-Driven Development (SDD)** approach, where specifications are written before implementation. This workflow is optimized for use with Cursor AI and includes automated type generation.
 
 ### Workflow Steps
 
 1. **Write Specifications First**
    - All features start in `/specs/`
    - API endpoints → `/specs/api/endpoints/`
-   - Data models → `/specs/data-models/`
+   - Data models → `/specs/data-models/entities/`
    - Feature specs → `/specs/features/`
 
-2. **Use Cursor AI for Implementation**
+2. **Generate Types from Specs**
+   ```bash
+   npm run generate:types    # Generate entity types
+   npm run generate:api      # Generate API clients
+   npm run generate:all      # Generate everything
+   ```
+   - Types are automatically generated from markdown specs
+   - No manual type definitions needed
+   - Types stay in sync with specs
+
+3. **Use Cursor AI for Implementation**
    - Reference specs when asking Cursor to generate code
    - Example prompt: "Implement the authentication endpoint as specified in `/specs/api/endpoints/auth.md`"
    - Cursor can read your specs and generate compliant code
+   - Generated types are available for use
 
-3. **Iterative Development**
+4. **Iterative Development**
    - Update specs as requirements evolve
+   - Regenerate types: `npm run generate:all`
    - Use Cursor's codebase search to understand existing patterns
    - Generate tests based on specs in `/specs/testing/`
 
-4. **Spec-to-Code Mapping**
-   - API specs → `backend/src/api/`
-   - Data model specs → `backend/src/domain/entities/`
+5. **Spec-to-Code Mapping**
+   - API specs → `backend/src/api/validators/` (Zod schemas)
+   - API specs → `mobile/services/api/client.ts` (API functions)
+   - Data model specs → `backend/src/domain/entities/` & `mobile/src/types/entities/`
    - Feature specs → Implementation across `backend/` and `mobile/`
 
 ### Cursor AI Tips
@@ -208,17 +265,42 @@ This project follows a **Spec-Driven Development (SDD)** approach, where specifi
 - **Testing**: Ask Cursor to generate tests based on `/specs/testing/` files
 - **Refactoring**: Use Cursor's refactor suggestions to align code with updated specs
 
+### Type Generation
+
+The project includes automated type generation from markdown specifications:
+
+- **Entity Types**: Generated from `/specs/data-models/entities/*.md`
+- **API Types**: Generated from `/specs/api/endpoints/*.md`
+- **Zod Schemas**: Generated for backend validation
+- **API Client**: Generated TypeScript functions for mobile
+
+See [scripts/README.md](scripts/README.md) for detailed documentation.
+
 ### Example Cursor Prompts
 
 ```
 "Implement the user authentication flow as specified in specs/features/auth/"
 
 "Generate TypeScript interfaces for the data models in specs/data-models/entities/"
+(Note: Types are auto-generated - use npm run generate:types instead)
 
 "Create API routes matching the endpoints defined in specs/api/endpoints/"
 
 "Write unit tests for the authentication service following specs/testing/backend-tests.md"
+
+"Implement the backup service using the LocalStorageService and EncryptionService"
 ```
+
+## Architecture
+
+The app follows a **local-first, privacy-focused architecture**:
+
+- **PII Stays Local**: All personally identifiable information is encrypted and stored locally
+- **Cloud for Identifiers Only**: Firebase stores only GUIDs and minimal metadata
+- **Encrypted Backups**: Periodic encrypted backups enable device migration
+- **Zero-Knowledge**: Backend cannot decrypt user data
+
+See [docs/ARCHITECTURE_DATA_STORAGE.md](docs/ARCHITECTURE_DATA_STORAGE.md) for detailed architecture documentation.
 
 ## Development Guidelines
 
@@ -227,6 +309,13 @@ See [docs/DEVELOPMENT_GUIDELINES.md](docs/DEVELOPMENT_GUIDELINES.md) for detaile
 ## Security
 
 Security is a top priority. See [docs/SECURITY_IMPLEMENTATION.md](docs/SECURITY_IMPLEMENTATION.md) for security requirements and implementation guidelines.
+
+The app implements:
+- AES-256-GCM encryption for all PII
+- Master key stored in iOS Keychain / Android Keystore
+- Biometric authentication for key access
+- Local-first data architecture
+- Encrypted backups with integrity verification
 
 ## Testing
 
