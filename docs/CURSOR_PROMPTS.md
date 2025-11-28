@@ -144,7 +144,73 @@ After completing backend API generation, proceed to:
 
 ## Step 5: Mobile (React Native) Code Generation
 
-*[To be added when requested: "Give me Step 4 for mobile."]*
+*[To be added when requested: "Give me Step 5 for mobile."]*
+
+---
+
+## Step 6: Mobile Screen Design with Claude/Cursor
+
+### ✅ **Cursor Prompt: Mobile Screen Design**
+
+> **MOBILE SCREEN DESIGN PROMPT — START**
+>
+> I need to design a [SCREEN_NAME] screen for my React Native Android app "Our Time Recovered".
+>
+> **App Context:**
+> - App Name: Our Time Recovered
+> - Purpose: Privacy-focused recovery milestone tracker
+> - Design System: Material Design 3
+> - Framework: React Native with React Native Paper
+> - Tone: Supportive, non-judgmental, privacy-focused
+>
+> **Screen Requirements:**
+> - [DESCRIBE KEY FEATURES/FUNCTIONALITY]
+>
+> **Design Requirements:**
+> - Follow Material Design 3 guidelines
+> - Use React Native Paper components
+> - Ensure accessibility (WCAG AA compliance)
+> - Support light and dark themes
+> - Touch targets minimum 48dp
+> - Proper spacing (8dp grid system)
+> - Clear visual hierarchy
+>
+> **Please create:**
+> 1. React Native component code in `mobile/src/screens/[SCREEN_PATH]/[SCREEN_NAME].tsx`
+> 2. TypeScript types if needed
+> 3. Brief design rationale explaining Material Design choices
+> 4. Accessibility features included
+>
+> Reference design specs in:
+> - `specs/design/android/theme-colors.md`
+> - `specs/design/android/brand-assets.md`
+> - `docs/DESIGN_ASSISTANCE_GUIDE.md`
+>
+> **MOBILE SCREEN DESIGN PROMPT — END**
+
+### Quick Design Prompts
+
+**Create any screen:**
+```
+Create a [SCREEN_NAME] screen for my React Native app following Material Design 3.
+Requirements: [LIST]
+Use React Native Paper components.
+```
+
+**Improve existing screen:**
+```
+Review and improve this screen for Material Design 3 compliance and accessibility:
+[PASTE CODE]
+```
+
+**Create design spec first:**
+```
+Create a design specification for [SCREEN_NAME] screen.
+Include layout, components, colors, typography, spacing, states.
+Format as markdown.
+```
+
+**For more design prompts, see:** `docs/DESIGN_ASSISTANCE_GUIDE.md`
 
 ---
 
@@ -166,6 +232,12 @@ After completing backend API generation, proceed to:
 3. Review and approve diffs
 4. Implement business logic
 5. Write tests from /specs/testing/
-6. Iterate and refine
+6. Design screens using Claude (see DESIGN_ASSISTANCE_GUIDE.md)
+7. Iterate and refine
 ```
+
+## Additional Resources
+
+- **Design Assistance:** See `docs/DESIGN_ASSISTANCE_GUIDE.md` for comprehensive design prompts and workflows
+- **Design Specs:** See `specs/design/` for brand assets, colors, and typography
 
