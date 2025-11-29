@@ -8,8 +8,8 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EncryptionService } from '../encryption/EncryptionService';
-import { UserProfile } from '../../types/entities/UserProfile';
-import { Friend } from '../../types/entities/Friend';
+import { UserProfile } from '../../src/types/entities/UserProfile';
+import { Friend } from '../../src/types/entities/Friend';
 
 const STORAGE_KEYS = {
   USER_PROFILE: '@otr:user:profile',

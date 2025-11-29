@@ -22,6 +22,14 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
 
 /**
  * Base API URL
+ * 
+ * NOTE: App currently runs fully offline. API calls are disabled.
+ * Set this when ready to enable cloud features.
+ * 
+ * To enable API calls later:
+ * 1. Set API_BASE_URL environment variable
+ * 2. Configure backend
+ * 3. Uncomment cloud sync calls in AppProvider
  */
-export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000/api';
+export const API_BASE_URL = process.env.API_BASE_URL || '';
 

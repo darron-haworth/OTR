@@ -9,8 +9,8 @@
 import { LocalStorageService } from '../storage/LocalStorageService';
 import { EncryptionService } from '../encryption/EncryptionService';
 import { backupsCreate, backupsList, backupsGet } from '../api/client';
-import { UserProfile } from '../../types/entities/UserProfile';
-import { Friend } from '../../types/entities/Friend';
+import { UserProfile } from '../../src/types/entities/UserProfile';
+import { Friend } from '../../src/types/entities/Friend';
 
 export interface BackupData {
   userProfile: UserProfile;

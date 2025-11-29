@@ -1,6 +1,16 @@
 # Our Time Recovered (OTR) Milestone Tracker
 
-A privacy-focused mobile application designed to support individuals in recovery by tracking milestones, facilitating connections with recovery friends, and maintaining motivation throughout their journey.
+## Goal:
+
+Build a privacy-focused mobile application to support individuals in recovery. 
+Core features:
+- Track personal recovery milestones securely.
+- Strengthen connection by allowing users to enter and follow recovery milestones for friends.
+- Send push notifications when friends approach milestones, prompting encouragement and support.
+- Create a sense of community where shared progress motivates continued sobriety.
+
+Goal: Empower recovery through secure milestone tracking and deep, supportive connections with others on the same journey.
+
 
 ## Project Overview
 

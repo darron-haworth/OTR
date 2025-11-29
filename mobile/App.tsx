@@ -2,60 +2,62 @@
  * OTR Milestone Tracker - Main App Component
  * 
  * Entry point for the React Native application
+ * Handles initialization, encryption setup, and navigation
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { AppProvider, useApp } from './src/providers';
+import { AppNavigator } from './src/navigation';
+import { LoadingScreen } from './src/screens/Loading';
+import { EncryptionSetupScreen } from './src/screens/EncryptionSetup';
 
-function App(): React.JSX.Element {
+/**
+ * Main app content that uses the app context
+ */
+function AppContent(): React.JSX.Element {
+  const {
+    profile,
+    friends,
+    isLoading,
+    isInitialized,
+    updateProfile,
+    addFriend,
+    updateFriend,
+    deleteFriend,
+  } = useApp();
+
+  // Show loading screen while initializing
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  // Show encryption setup if not initialized
+  if (!isInitialized) {
+    return <EncryptionSetupScreen />;
+  }
+
+  // Show main app with navigation
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.content}>
-        <Text style={styles.title}>Our Time Recovered</Text>
-        <Text style={styles.subtitle}>Milestone Tracker</Text>
-        <Text style={styles.description}>
-          App is ready for development
-        </Text>
-      </View>
-    </SafeAreaView>
+    <AppNavigator
+      initialProfile={profile || undefined}
+      initialFriends={friends}
+      onUpdateProfile={updateProfile}
+      onAddFriend={addFriend}
+      onUpdateFriend={updateFriend}
+      onDeleteFriend={deleteFriend}
+    />
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000000',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 20,
-    color: '#666666',
-    marginBottom: 24,
-  },
-  description: {
-    fontSize: 16,
-    color: '#999999',
-    textAlign: 'center',
-  },
-});
+/**
+ * Root app component with provider
+ */
+function App(): React.JSX.Element {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
+  );
+}
 
 export default App;
-

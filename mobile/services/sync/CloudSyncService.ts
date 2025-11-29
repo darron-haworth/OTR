@@ -7,8 +7,8 @@
  */
 
 import { LocalStorageService } from '../storage/LocalStorageService';
-import { UserProfile } from '../../types/entities/UserProfile';
-import { Friend } from '../../types/entities/Friend';
+import { UserProfile } from '../../src/types/entities/UserProfile';
+import { Friend } from '../../src/types/entities/Friend';
 import { usersRegisterCreate } from '../api/client';
 
 export class CloudSyncService {
