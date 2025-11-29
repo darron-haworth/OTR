@@ -6,13 +6,13 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
-import { colors, borders, spacing, typography, shadows } from '@/theme';
-import { recoveryGroups } from '@/theme';
+import { colors, borders, spacing, typography, shadows } from '../../theme';
+import { recoveryGroups } from '../../theme';
 import { FriendAvatar } from './FriendAvatar';
 import { RecoveryTimeDisplay } from '../recovery/RecoveryTimeDisplay';
-import { calculateTimeInRecovery } from '@/utils/timeCalculations';
-import { getMilestoneBadge } from '@/utils/milestoneHelpers';
-import type { Friend } from '@/types/entities/Friend';
+import { calculateTimeInRecovery } from '../../utils/timeCalculations';
+import { getMilestoneBadge } from '../../utils/milestoneHelpers';
+import type { Friend } from '../../types/entities/Friend';
 
 export interface FriendCardProps {
   friend: Friend;
@@ -56,16 +56,29 @@ export const FriendCard: React.FC<FriendCardProps> = ({
                 const programInfo = recoveryGroups[group.groupId.toUpperCase() as keyof typeof recoveryGroups] || recoveryGroups.OTHER;
                 const time = calculateTimeInRecovery(group.recoveryDate);
                 const milestone = getMilestoneBadge(time.days);
+                
+                // Format time consistently: show Years and Months for all friends
+                let timeDisplay = '';
+                if (time.days >= 365) {
+                  const years = Math.floor(time.days / 365);
+                  const remainingDays = time.days % 365;
+                  const months = Math.floor(remainingDays / 30);
+                  if (months > 0) {
+                    timeDisplay = `${years}y ${months}m`;
+                  } else {
+                    timeDisplay = `${years}y`;
+                  }
+                } else if (time.days >= 30) {
+                  const months = Math.floor(time.days / 30);
+                  timeDisplay = `${months}m`;
+                } else {
+                  timeDisplay = `${time.days}d`;
+                }
 
                 return (
                   <View key={index} style={styles.programPill}>
                     <Text style={styles.programIcon}>{programInfo.icon}</Text>
-                    <RecoveryTimeDisplay
-                      startDate={group.recoveryDate}
-                      format="short"
-                      showBadge={false}
-                      textStyle={styles.programTime}
-                    />
+                    <Text style={styles.programTime}>{timeDisplay}</Text>
                     {milestone && (
                       <Text style={styles.programBadge}>{milestone.emoji}</Text>
                     )}

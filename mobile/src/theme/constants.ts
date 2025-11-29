@@ -16,10 +16,13 @@ export const milestones = {
     '270days': { emoji: '🌟', label: '9 Months!', color: colors.accent },
     '365days': { emoji: '🎂', label: 'One Year!', color: colors.primary },
     '730days': { emoji: '👑', label: 'Two Years!', color: colors.secondary },
+    '1095days': { emoji: '💎', label: 'Three Years!', color: colors.secondary },
+    '1460days': { emoji: '🏅', label: 'Four Years!', color: colors.secondary },
+    '1825days': { emoji: '🎖️', label: 'Five Years!', color: colors.secondary },
   },
   
   getNextMilestone: (days: number): number | null => {
-    const milestoneKeys = [1, 7, 14, 30, 90, 180, 270, 365, 730];
+    const milestoneKeys = [1, 7, 14, 30, 90, 180, 270, 365, 730, 1095, 1460, 1825];
     return milestoneKeys.find(key => key > days) || null;
   },
 } as const;

@@ -34,13 +34,14 @@ export function calculateTimeInRecovery(recoveryDate: string): TimeInRecovery {
     isMilestone = months % 3 === 0;
   } else {
     const years = Math.floor(diffDays / 365);
-    const remainingMonths = Math.floor((diffDays % 365) / 30);
+    const remainingDays = diffDays % 365;
+    const remainingMonths = Math.floor(remainingDays / 30);
     if (remainingMonths > 0) {
       value = `${years}y ${remainingMonths}m`;
       unit = '';
     } else {
       value = years;
-      unit = years === 1 ? 'years' : 'years';
+      unit = years === 1 ? 'year' : 'years';
     }
     isMilestone = remainingMonths === 0;
   }
@@ -63,6 +64,11 @@ export function formatTimeInRecovery(
   const time = calculateTimeInRecovery(recoveryDate);
   
   if (format === 'short') {
+    // For short format, if we have years with months, show the compact format
+    if (typeof time.value === 'string' && time.value.includes('y')) {
+      return time.value;
+    }
+    // Otherwise show value and unit
     return `${time.value} ${time.unit}`;
   }
   
@@ -73,6 +79,10 @@ export function formatTimeInRecovery(
       return `${time.value} ${time.value === 1 ? 'month' : 'months'}`;
     } else if (time.unit === 'years') {
       return `${time.value} ${time.value === 1 ? 'year' : 'years'}`;
+    }
+    // Handle string values like "2y 3m"
+    if (typeof time.value === 'string') {
+      return time.value.replace('y', ' year').replace('m', ' month');
     }
     return String(time.value);
   }
@@ -90,7 +100,8 @@ export function formatTimeInRecovery(
     return `${months} ${months === 1 ? 'month' : 'months'}`;
   } else {
     const years = Math.floor(days / 365);
-    const remainingMonths = Math.floor((days % 365) / 30);
+    const remainingDaysAfterYears = days % 365;
+    const remainingMonths = Math.floor(remainingDaysAfterYears / 30);
     if (remainingMonths > 0) {
       return `${years} ${years === 1 ? 'year' : 'years'}, ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
     }
