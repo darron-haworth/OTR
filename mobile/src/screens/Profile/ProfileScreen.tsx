@@ -4,7 +4,7 @@
  * Generated from otr-milestone-tracker.jsx and specs/design/mobile/mobile-screens.md
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -30,14 +30,29 @@ export interface ProfileScreenProps {
   profile: UserProfile;
   onUpdateProfile: (profile: UserProfile) => void;
   onNavigateBack: () => void;
+  initialEditMode?: boolean;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   profile,
   onUpdateProfile,
   onNavigateBack,
+  initialEditMode = false,
 }) => {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(initialEditMode);
+  const firstNameRef = useRef<TextInput>(null);
+  const lastNameRef = useRef<TextInput>(null);
+  const publicNameRef = useRef<TextInput>(null);
+  
+  // Auto-focus first field when entering edit mode
+  useEffect(() => {
+    if (editing && initialEditMode) {
+      // Small delay to ensure the screen is rendered
+      setTimeout(() => {
+        publicNameRef.current?.focus();
+      }, 100);
+    }
+  }, [editing, initialEditMode]);
   const [tempProfile, setTempProfile] = useState<UserProfile>({ ...profile });
   const [selectedProgramId, setSelectedProgramId] = useState<string>('');
   const [recoveryDate, setRecoveryDate] = useState('');
@@ -137,6 +152,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Public Name (shown to friends)</Text>
             <TextInput
+              ref={publicNameRef}
               style={[
                 styles.input,
                 editing && styles.inputActive,
@@ -149,6 +165,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
               editable={editing}
               placeholder="Your recovery name"
               placeholderTextColor={colors.gray[400]}
+              returnKeyType="next"
+              onSubmitEditing={() => firstNameRef.current?.focus()}
             />
           </View>
 
@@ -156,6 +174,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             <View style={[styles.inputGroup, styles.halfWidth]}>
               <Text style={styles.label}>First Name</Text>
               <TextInput
+                ref={firstNameRef}
                 style={[
                   styles.input,
                   editing && styles.inputActive,
@@ -168,12 +187,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 editable={editing}
                 placeholder="First name"
                 placeholderTextColor={colors.gray[400]}
+                returnKeyType="next"
+                onSubmitEditing={() => lastNameRef.current?.focus()}
               />
             </View>
 
             <View style={[styles.inputGroup, styles.halfWidth]}>
               <Text style={styles.label}>Last Name</Text>
               <TextInput
+                ref={lastNameRef}
                 style={[
                   styles.input,
                   editing && styles.inputActive,
@@ -186,6 +208,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 editable={editing}
                 placeholder="Last name"
                 placeholderTextColor={colors.gray[400]}
+                returnKeyType="done"
+                onSubmitEditing={() => lastNameRef.current?.blur()}
               />
             </View>
           </View>

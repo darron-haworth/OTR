@@ -16,7 +16,7 @@ export type MainTabParamList = {
 export type RootStackParamList = {
   Landing: undefined;
   MainTabs: NavigatorScreenParams<MainTabParamList>;
-  Profile: undefined;
+  Profile: { initialEditMode?: boolean } | undefined;
   FriendsList: undefined;
   EditFriend: { friend: Friend };
 };

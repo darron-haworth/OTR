@@ -245,8 +245,7 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({
           {(props) => (
             <LandingScreen
               {...props}
-              onNavigateToProfile={() => props.navigation.navigate('Profile')}
-              onNavigateToFriends={() => props.navigation.navigate('FriendsList')}
+              onNavigateToProfile={() => props.navigation.navigate('Profile', { initialEditMode: true })}
             />
           )}
         </Stack.Screen>
@@ -267,14 +266,19 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({
         </Stack.Screen>
 
         <Stack.Screen name="Profile">
-          {(props) => (
-            <ProfileScreen
-              {...props}
-              profile={defaultProfile}
-              onUpdateProfile={(updatedProfile) => handleUpdateProfile(updatedProfile, props.navigation)}
-              onNavigateBack={() => props.navigation.goBack()}
-            />
-          )}
+          {(props) => {
+            // Check if we're coming from Landing screen (route params)
+            const initialEditMode = props.route.params?.initialEditMode || false;
+            return (
+              <ProfileScreen
+                {...props}
+                profile={defaultProfile}
+                onUpdateProfile={(updatedProfile) => handleUpdateProfile(updatedProfile, props.navigation)}
+                onNavigateBack={() => props.navigation.goBack()}
+                initialEditMode={initialEditMode}
+              />
+            );
+          }}
         </Stack.Screen>
 
         <Stack.Screen name="FriendsList">

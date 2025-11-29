@@ -20,12 +20,10 @@ import { colors, typography, spacing, borders, shadows, gradients } from '../../
 
 export interface LandingScreenProps {
   onNavigateToProfile: () => void;
-  onNavigateToFriends: () => void;
 }
 
 export const LandingScreen: React.FC<LandingScreenProps> = ({
   onNavigateToProfile,
-  onNavigateToFriends,
 }) => {
   const features = [
     { icon: '🛡️', text: 'Complete Privacy', color: colors.primary },
@@ -96,14 +94,6 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
               style={styles.primaryButton}
             >
               Start Your Journey →
-            </NeuButton>
-
-            <NeuButton
-              onPress={onNavigateToFriends}
-              variant="default"
-              style={styles.secondaryButton}
-            >
-              View Recovery Friends
             </NeuButton>
           </View>
         </ScrollView>
@@ -196,11 +186,6 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     marginBottom: spacing.md,
-  },
-  secondaryButton: {
-    borderWidth: borders.width.default,
-    borderColor: colors.secondary,
-    backgroundColor: 'transparent',
   },
 });
 

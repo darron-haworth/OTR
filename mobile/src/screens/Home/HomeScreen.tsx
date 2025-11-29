@@ -16,11 +16,9 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { GlassCard } from '../../components/common/GlassCard';
-import { MilestoneBadge } from '../../components/common/MilestoneBadge';
 import { FriendCard } from '../../components/friends/FriendCard';
 import { colors, typography, spacing, borders, shadows, gradients, recoveryGroups } from '../../theme';
 import { calculateTimeInRecovery, formatTimeInRecovery } from '../../utils/timeCalculations';
-import { getMilestoneForDate } from '../../utils/milestoneHelpers';
 import { getPrimaryRecoveryGroup } from '../../utils/profileHelpers';
 import type { UserProfile } from '../../types/entities/UserProfile';
 import type { Friend } from '../../types/entities/Friend';
@@ -74,7 +72,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   }, [recoveryDate]);
   
-  const milestone = recoveryDate ? getMilestoneForDate(recoveryDate) : null;
   const timeInRecovery = recoveryDate ? calculateTimeInRecovery(recoveryDate) : null;
   
   // Sort friends by next upcoming milestone
@@ -134,24 +131,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <View style={styles.profileInfo}>
                 <Text style={styles.profileName}>{publicName}</Text>
                 {primaryGroup && (
-                  <Text style={styles.profileProgram}>
-                    {recoveryGroups[primaryGroup.groupId as keyof typeof recoveryGroups]?.name?.toUpperCase() || primaryGroup.groupId.toUpperCase()}
-                  </Text>
+                  <>
+                    <Text style={styles.profileProgram}>
+                      Program: {recoveryGroups[primaryGroup.groupId as keyof typeof recoveryGroups]?.name?.toUpperCase() || primaryGroup.groupId.toUpperCase()}
+                    </Text>
+                    {primaryGroup.recoveryDate && (
+                      <Text style={styles.profileRecoveryDate}>
+                        Recovery Date: {new Date(primaryGroup.recoveryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </Text>
+                    )}
+                  </>
                 )}
               </View>
             </View>
             
             {recoveryDate ? (
               <View style={styles.milestoneRow}>
-                <View style={styles.milestoneItem}>
-                  <Text style={styles.milestoneValue}>
-                    {timeBreakdown.days || 0}
-                  </Text>
-                  <Text style={styles.milestoneLabel}>Days</Text>
-                </View>
-                {milestone && timeBreakdown.days > 0 && (
-                  <MilestoneBadge days={timeBreakdown.days} size="small" />
-                )}
+                <Text style={styles.milestoneValue}>
+                  {(timeBreakdown.days || 0).toLocaleString()} Days Recovered
+                </Text>
               </View>
             ) : (
               <View style={styles.milestoneRow}>
@@ -209,9 +207,9 @@ const styles = StyleSheet.create({
   },
   brandCard: {
     marginBottom: spacing.md,
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.xl,
-    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.sm,
+    paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surface,
@@ -219,7 +217,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassDark,
     ...shadows.md,
-    minHeight: 200,
   },
   logoSection: {
     alignItems: 'center',
@@ -227,11 +224,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     overflow: 'hidden',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xs,
     ...shadows.md,
   },
   logoGradient: {
@@ -241,14 +238,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoEmoji: {
-    fontSize: 40,
+    fontSize: 28,
   },
   title: {
-    ...typography.styles.h1,
-    fontSize: typography.fontSize['3xl'],
+    ...typography.styles.h3,
+    fontSize: typography.fontSize.xl,
     textAlign: 'center',
     color: colors.dark,
-    lineHeight: typography.fontSize['3xl'] * 1.2,
+    lineHeight: typography.fontSize.xl * 1.2,
     fontWeight: '700',
     marginTop: 0,
     paddingTop: 0,
@@ -256,53 +253,50 @@ const styles = StyleSheet.create({
   },
   profileCard: {
     marginBottom: spacing.md,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   profileHeader: {
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   profileInfo: {
     alignItems: 'center',
   },
   profileName: {
-    ...typography.styles.h3,
-    fontSize: typography.fontSize.xl,
-    marginBottom: spacing.xs,
+    ...typography.styles.h4,
+    fontSize: typography.fontSize.lg,
+    marginBottom: 2,
     textAlign: 'center',
   },
   profileProgram: {
     ...typography.styles.body,
     color: colors.gray[600],
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.xs,
     fontWeight: '600',
     letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  profileRecoveryDate: {
+    ...typography.styles.body,
+    color: colors.gray[600],
+    fontSize: typography.fontSize.xs,
+    fontWeight: '500',
+    marginTop: 2,
   },
   milestoneRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xs,
     borderTopWidth: 1,
     borderTopColor: colors.gray[200],
   },
-  milestoneItem: {
-    alignItems: 'center',
-    marginRight: spacing.md,
-  },
   milestoneValue: {
-    fontSize: 36,
+    fontSize: 19,
     color: colors.primary,
-    lineHeight: 43,
+    lineHeight: 23,
     fontWeight: '700',
-    minWidth: 100,
     textAlign: 'center',
     includeFontPadding: false,
-  },
-  milestoneLabel: {
-    ...typography.styles.caption,
-    color: colors.gray[600],
-    marginTop: spacing.xs,
-    fontSize: typography.fontSize.xs,
   },
   noDateText: {
     ...typography.styles.body,
