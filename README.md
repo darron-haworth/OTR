@@ -73,10 +73,27 @@ OTR/
 │       └── integration/
 │
 ├── mobile/                  # React Native mobile app
-│   ├── app/
-│   │   ├── navigation/
-│   │   ├── state/
-│   │   └── providers/
+│   ├── src/
+│   │   ├── screens/         # Screen components
+│   │   │   ├── Landing/     # Landing/onboarding screen
+│   │   │   ├── Home/        # Main dashboard (profile complete)
+│   │   │   ├── Profile/     # User profile management
+│   │   │   ├── Friends/     # Friends list and edit
+│   │   │   └── Loading/     # Loading screen
+│   │   ├── components/      # Reusable UI components
+│   │   │   ├── common/      # GlassCard, NeuButton, MilestoneBadge
+│   │   │   ├── recovery/    # RecoveryProgramCard, RecoveryTimeDisplay
+│   │   │   └── friends/    # FriendCard, FriendAvatar, AddFriendForm
+│   │   ├── navigation/     # React Navigation setup
+│   │   ├── providers/       # AppProvider with state management
+│   │   ├── theme/          # Design system (colors, typography, spacing)
+│   │   ├── utils/          # Helper functions
+│   │   └── types/          # TypeScript types (auto-generated)
+│   ├── services/           # Business logic services
+│   │   ├── storage/        # LocalStorageService
+│   │   ├── encryption/     # EncryptionService
+│   │   ├── backup/         # BackupService
+│   │   └── sync/           # CloudSyncService
 │   ├── components/
 │   ├── screens/
 │   ├── services/
@@ -243,6 +260,25 @@ OTR/
    ```
 
 ## Spec-Driven Development Workflow
+
+### Current Implementation Status
+
+**✅ Completed:**
+- All mobile screens implemented (Landing, Home, Profile, Friends)
+- Bottom tab navigation with conditional routing
+- Theme system fully implemented
+- All reusable components created
+- Local storage integration complete
+- Offline-first functionality (no API dependencies)
+
+**📋 Spec Files:**
+- `specs/design/mobile/mobile-screens.md` - Screen specifications
+- `specs/design/mobile/mobile-theme.md` - Theme system
+- `specs/design/mobile/ui-components.md` - Component specifications
+- `specs/data-models/entities/*.md` - Entity type definitions
+- `specs/api/endpoints/*.md` - API endpoint specifications
+
+### Spec-Driven Development Workflow
 
 This project follows a **Spec-Driven Development (SDD)** approach, where specifications are written before implementation. This workflow is optimized for use with Cursor AI and includes automated type generation.
 
