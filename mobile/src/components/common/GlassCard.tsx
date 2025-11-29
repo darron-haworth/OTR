@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
-import { colors, borders, shadows, spacing } from '@/theme';
+import { colors, borders, shadows, spacing } from '../../theme';
 
 export interface GlassCardProps {
   children: React.ReactNode;
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.glassDark,
     ...shadows.md,
+    overflow: 'visible',
   },
 });
 
