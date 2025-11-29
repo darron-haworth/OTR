@@ -17,17 +17,6 @@ const config = {
       },
     }),
   },
-  resolver: {
-    alias: {
-      '@': './src',
-      '@components': './components',
-      '@screens': './screens',
-      '@services': './services',
-      '@hooks': './hooks',
-      '@utils': './utils',
-      '@types': './src/types',
-    },
-  },
 };
 
 module.exports = mergeConfig(defaultConfig, config);
