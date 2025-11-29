@@ -48,12 +48,32 @@ All screens from the JSX file have been successfully converted to React Native a
   - Save and delete actions
 - **Components Used**: `FriendAvatar`, `MilestoneBadge`, `RecoveryProgramCard`, `ProgramSelector`, `NeuButton`
 
+## ✅ New: Home Screen
+
+### 5. Home Screen (`mobile/src/screens/Home/`)
+- **File**: `HomeScreen.tsx`
+- **Purpose**: Main dashboard when profile is complete
+- **Features**:
+  - Brand card with logo and "Our Time Recovered" title
+  - User profile card showing:
+    - Name and recovery program (uppercase)
+    - Days count with milestone badge
+  - Friends list sorted by next upcoming milestone
+  - Consistent time formatting (Years/Months) for all friends
+- **Components Used**: `GlassCard`, `MilestoneBadge`, `FriendCard`, `LinearGradient`
+- **Conditional Display**: Only shown when profile is complete (has firstName, lastName, and active recovery group with date)
+
 ## ✅ Navigation Structure
 
 ### Navigation Setup (`mobile/src/navigation/`)
 
 #### AppNavigator.tsx
 - Main navigation container
+- **Bottom Tab Navigation**: Implemented with Home, Profile, Friends tabs
+- **Conditional Routing**: 
+  - Profile incomplete → Landing screen (no tabs)
+  - Profile complete → MainTabs with bottom navigation
+- **Stack Navigation**: Edit Friend screen overlays tabs
 - Stack navigator with 4 screens
 - State management for profile and friends
 - Callback props for data persistence

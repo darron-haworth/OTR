@@ -280,13 +280,76 @@ interface RecoveryTimeDisplayProps {
 
 ---
 
+## Home Screen
+
+### Purpose
+Main dashboard screen shown when user profile is complete. Displays user's recovery milestones and sorted friends list.
+
+### Layout Structure
+```
+┌─────────────────────────────┐
+│      Status Bar             │
+├─────────────────────────────┤
+│  ┌─────────────────────┐    │
+│  │   [Brand Card]       │    │
+│  │   [Logo + Title]     │    │
+│  │  "Our Time Recovered"│    │
+│  └─────────────────────┘    │
+├─────────────────────────────┤
+│  ┌─────────────────────┐    │
+│  │  [User Name]        │    │
+│  │  [PROGRAM NAME]     │    │
+│  │  ─────────────────   │    │
+│  │  [Days Count] [🏆]  │    │
+│  │      Days            │    │
+│  └─────────────────────┘    │
+├─────────────────────────────┤
+│  Recovery Friends    [+Add] │
+│  ┌─────────────────────┐    │
+│  │ [Friend Card]        │    │
+│  └─────────────────────┘    │
+│  ┌─────────────────────┐    │
+│  │ [Friend Card]        │    │
+│  └─────────────────────┘    │
+├─────────────────────────────┤
+│  [Home] [Profile] [Friends] │
+└─────────────────────────────┘
+```
+
+### Components
+- **Brand Card**: Logo with gradient background, app title "Our Time Recovered"
+- **Profile Card**: Compressed card showing:
+  - User name (centered)
+  - Recovery program name (uppercase)
+  - Days count with milestone badge
+- **Friends List**: Sorted by next upcoming milestone
+- **Bottom Tab Navigation**: Home, Profile, Friends tabs
+
+### States
+- **Profile Complete**: Shows Home screen with tabs
+- **Profile Incomplete**: Shows Landing screen (no tabs)
+
+### Interactions
+- Profile card → Navigate to Profile tab
+- Friend card → Navigate to Edit Friend screen
+- Tab navigation → Switch between Home, Profile, Friends
+
+---
+
 ## Navigation Flow
 
 ```
-Landing Screen
+Landing Screen (Profile Incomplete)
     ├── Profile Screen
     │   └── Edit Mode
     └── Friends List Screen
+        ├── Add Friend Form
+        └── Edit Friend Screen
+
+Home Screen (Profile Complete) [Bottom Tabs]
+    ├── Home Tab (default)
+    ├── Profile Tab
+    └── Friends Tab
         ├── Add Friend Form
         └── Edit Friend Screen
 ```
