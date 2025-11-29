@@ -79,8 +79,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <LinearGradient
-        colors={gradients.soft.colors}
+              <LinearGradient
+                colors={[...gradients.soft.colors]}
         start={gradients.soft.start}
         end={gradients.soft.end}
         style={styles.header}
@@ -108,8 +108,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Avatar */}
         <View style={styles.avatarContainer}>
-          <LinearGradient
-            colors={gradients.warm.colors}
+              <LinearGradient
+                colors={[...gradients.warm.colors]}
             start={gradients.warm.start}
             end={gradients.warm.end}
             style={styles.avatar}

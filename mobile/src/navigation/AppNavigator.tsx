@@ -18,7 +18,8 @@ import { isProfileComplete } from '../utils/profileHelpers';
 import { colors, typography } from '../theme';
 import type { RootStackParamList, MainTabParamList } from './types';
 import type { UserProfile } from '../types/entities/UserProfile';
-import type { Friend, RecoveryGroupMembership } from '../types/entities/Friend';
+import type { Friend } from '../types/entities/Friend';
+import type { RecoveryGroupMembership } from '../types/entities/UserProfile';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();

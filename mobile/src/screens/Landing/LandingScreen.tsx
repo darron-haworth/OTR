@@ -48,7 +48,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
           <View style={styles.logoSection}>
             <View style={styles.logoContainer}>
               <LinearGradient
-                colors={gradients.warm.colors}
+                colors={[...gradients.warm.colors]}
                 start={gradients.warm.start}
                 end={gradients.warm.end}
                 style={styles.logoGradient}

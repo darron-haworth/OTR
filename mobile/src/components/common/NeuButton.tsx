@@ -14,7 +14,7 @@ export interface NeuButtonProps {
   variant?: 'default' | 'primary' | 'danger';
   disabled?: boolean;
   loading?: boolean;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
   textStyle?: TextStyle;
 }
 

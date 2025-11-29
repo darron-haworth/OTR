@@ -74,7 +74,7 @@ export const AddFriendForm: React.FC<AddFriendFormProps> = ({
   const isValid = (firstName.trim() || lastName.trim()) && recoveryGroups.length > 0;
 
   return (
-    <GlassCard style={[styles.container, style]}>
+    <GlassCard style={style ? [styles.container, style] : styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Add Recovery Friend</Text>
 

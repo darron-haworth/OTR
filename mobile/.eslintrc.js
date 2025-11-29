@@ -30,7 +30,8 @@ module.exports = {
   },
   env: {
     'react-native/react-native': true,
-    jest: true,
+    node: true,
+    es6: true,
   },
   rules: {
     'prettier/prettier': 'error',

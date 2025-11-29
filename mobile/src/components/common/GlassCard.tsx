@@ -12,7 +12,7 @@ export interface GlassCardProps {
   children: React.ReactNode;
   padding?: number;
   borderRadius?: number;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
 }
 
 export const GlassCard: React.FC<GlassCardProps> = ({

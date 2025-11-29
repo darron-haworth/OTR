@@ -63,7 +63,7 @@ export const FriendAvatar: React.FC<FriendAvatarProps> = ({
   return (
     <View style={[styles.container, { width: size, height: size }, style]}>
       <LinearGradient
-        colors={gradients.cool.colors}
+        colors={[...gradients.cool.colors]}
         start={gradients.cool.start}
         end={gradients.cool.end}
         style={[

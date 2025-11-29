@@ -19,7 +19,8 @@ import { FriendCard } from '../../components/friends/FriendCard';
 import { AddFriendForm } from '../../components/friends/AddFriendForm';
 import { NeuButton } from '../../components/common/NeuButton';
 import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
-import type { Friend, RecoveryGroupMembership } from '../../types/entities/Friend';
+import type { Friend } from '../../types/entities/Friend';
+import type { RecoveryGroupMembership } from '../../types/entities/UserProfile';
 
 export interface FriendsListScreenProps {
   friends: Friend[];
@@ -46,7 +47,6 @@ export const FriendsListScreen: React.FC<FriendsListScreenProps> = ({
       firstName: data.firstName,
       lastName: data.lastName,
       recoveryGroups: data.recoveryGroups,
-      connectionStatus: 'local',
     };
     onAddFriend(newFriend);
     setShowAddForm(false);
@@ -56,7 +56,7 @@ export const FriendsListScreen: React.FC<FriendsListScreenProps> = ({
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <LinearGradient
-        colors={gradients.soft.colors}
+        colors={[...gradients.soft.colors]}
         start={gradients.soft.start}
         end={gradients.soft.end}
         style={styles.header}
@@ -79,7 +79,7 @@ export const FriendsListScreen: React.FC<FriendsListScreenProps> = ({
         {/* Friends Count */}
         <View style={styles.countContainer}>
           <LinearGradient
-            colors={gradients.warm.colors}
+            colors={[...gradients.warm.colors]}
             start={gradients.warm.start}
             end={gradients.warm.end}
             style={styles.countBadge}

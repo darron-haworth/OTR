@@ -6,6 +6,8 @@
  * Run 'npm run generate:types' to regenerate
  */
 
+import type { RecoveryGroupMembership } from './UserProfile';
+
 export interface Friend {
   // Identifiers
   localId: string;            // UUID v4, generated locally

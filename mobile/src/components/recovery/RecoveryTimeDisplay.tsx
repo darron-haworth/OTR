@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   time: {
-    ...typography.styles.bodyBold,
+    ...typography.styles.body,
     fontSize: typography.fontSize.base,
     fontWeight: '700',
   },

@@ -26,7 +26,8 @@ import { FriendAvatar } from '../../components/friends/FriendAvatar';
 import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
 import { calculateTimeInRecovery } from '../../utils/timeCalculations';
 import { getMilestoneForDate } from '../../utils/milestoneHelpers';
-import type { Friend, RecoveryGroupMembership } from '../../types/entities/Friend';
+import type { Friend } from '../../types/entities/Friend';
+import type { RecoveryGroupMembership } from '../../types/entities/UserProfile';
 
 export interface EditFriendScreenProps {
   friend: Friend;
@@ -93,20 +94,23 @@ export const EditFriendScreen: React.FC<EditFriendScreenProps> = ({
   };
 
   // Get longest recovery for main badge
-  const getLongestRecovery = () => {
+  const getLongestRecovery = (): ReturnType<typeof getMilestoneForDate> | null => {
     if (tempFriend.recoveryGroups.length === 0) return null;
     let longestDays = 0;
     let longestGroup: RecoveryGroupMembership | null = null;
 
-    tempFriend.recoveryGroups.forEach((group) => {
+    for (const group of tempFriend.recoveryGroups) {
       const time = calculateTimeInRecovery(group.recoveryDate);
       if (time.days > longestDays) {
         longestDays = time.days;
         longestGroup = group;
       }
-    });
+    }
 
-    return longestGroup ? getMilestoneForDate(longestGroup.recoveryDate) : null;
+    if (longestGroup) {
+      return getMilestoneForDate(longestGroup.recoveryDate);
+    }
+    return null;
   };
 
   const mainMilestone = getLongestRecovery();
@@ -118,7 +122,7 @@ export const EditFriendScreen: React.FC<EditFriendScreenProps> = ({
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <LinearGradient
-        colors={gradients.soft.colors}
+        colors={[...gradients.soft.colors]}
         start={gradients.soft.start}
         end={gradients.soft.end}
         style={styles.header}
@@ -156,7 +160,7 @@ export const EditFriendScreen: React.FC<EditFriendScreenProps> = ({
         {mainMilestone && (
           <View style={styles.milestoneCelebration}>
             <LinearGradient
-              colors={gradients.warm.colors}
+              colors={[...gradients.warm.colors]}
               start={gradients.warm.start}
               end={gradients.warm.end}
               style={styles.milestoneBadge}
