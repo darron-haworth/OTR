@@ -11,10 +11,26 @@ export interface TimeInRecovery {
 }
 
 /**
+ * Parse a date string and create a local date object to avoid timezone issues
+ */
+function parseLocalDate(dateString: string): Date {
+  // If it's in YYYY-MM-DD format, parse it as local date
+  const dateParts = dateString.split('-');
+  if (dateParts.length === 3) {
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+    const day = parseInt(dateParts[2], 10);
+    return new Date(year, month, day);
+  }
+  // Fallback to standard parsing
+  return new Date(dateString);
+}
+
+/**
  * Calculate time in recovery from a start date
  */
 export function calculateTimeInRecovery(recoveryDate: string): TimeInRecovery {
-  const start = new Date(recoveryDate);
+  const start = parseLocalDate(recoveryDate);
   const now = new Date();
   const diffTime = Math.abs(now.getTime() - start.getTime());
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));

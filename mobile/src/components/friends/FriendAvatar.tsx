@@ -40,7 +40,7 @@ export const FriendAvatar: React.FC<FriendAvatarProps> = ({
   };
 
   // Find the longest recovery time for badge
-  const getLongestRecovery = (): { days: number; milestone: ReturnType<typeof getMilestoneForDate> } | null => {
+  const getLongestRecovery = (): { days: number; years: number; milestone: ReturnType<typeof getMilestoneForDate> } | null => {
     if (recoveryGroups.length === 0) return null;
 
     let longestDays = 0;
@@ -54,11 +54,15 @@ export const FriendAvatar: React.FC<FriendAvatarProps> = ({
       }
     });
 
-    return longestMilestone ? { days: longestDays, milestone: longestMilestone } : null;
+    if (!longestMilestone) return null;
+    
+    const years = Math.floor(longestDays / 365);
+    return { days: longestDays, years, milestone: longestMilestone };
   };
 
   const longestRecovery = getLongestRecovery();
   const initial = getInitial();
+  const showYearsBadge = longestRecovery && longestRecovery.years > 1;
 
   return (
     <View style={[styles.container, { width: size, height: size }, style]}>
@@ -88,7 +92,13 @@ export const FriendAvatar: React.FC<FriendAvatarProps> = ({
       </LinearGradient>
       {showBadge && longestRecovery && longestRecovery.milestone && (
         <View style={styles.badgeContainer}>
-          <MilestoneBadge days={longestRecovery.days} size="small" />
+          {showYearsBadge ? (
+            <View style={styles.yearsBadge}>
+              <Text style={styles.yearsBadgeText}>{longestRecovery.years}y</Text>
+            </View>
+          ) : (
+            <MilestoneBadge days={longestRecovery.days} size="small" />
+          )}
         </View>
       )}
     </View>
@@ -113,6 +123,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -5,
     right: -5,
+  },
+  yearsBadge: {
+    backgroundColor: colors.accent,
+    borderRadius: borders.radius.full,
+    minWidth: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    borderWidth: 2,
+    borderColor: colors.surface,
+    ...shadows.sm,
+  },
+  yearsBadgeText: {
+    ...typography.styles.caption,
+    fontSize: typography.fontSize.xs,
+    fontWeight: '700',
+    color: colors.white,
   },
 });
 

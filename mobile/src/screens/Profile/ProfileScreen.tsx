@@ -67,9 +67,33 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
   const handleAddProgram = () => {
     if (selectedProgramId && recoveryDate) {
+      // Parse and normalize the date to avoid timezone issues
+      // Support formats: MM/DD/YY, MM/DD/YYYY, YYYY-MM-DD
+      let normalizedDate = recoveryDate.trim();
+      
+      // If it's in MM/DD/YY or MM/DD/YYYY format, convert to YYYY-MM-DD
+      const mmddyyMatch = normalizedDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+      if (mmddyyMatch) {
+        const [, month, day, year] = mmddyyMatch;
+        const fullYear = year.length === 2 ? `20${year}` : year;
+        const paddedMonth = month.padStart(2, '0');
+        const paddedDay = day.padStart(2, '0');
+        normalizedDate = `${fullYear}-${paddedMonth}-${paddedDay}`;
+      }
+      
+      // Validate the date
+      const dateObj = new Date(normalizedDate);
+      if (isNaN(dateObj.getTime())) {
+        // Invalid date, use as-is but log warning
+        console.warn('Invalid date format:', recoveryDate);
+      } else {
+        // Use ISO date string (YYYY-MM-DD) to avoid timezone issues
+        normalizedDate = normalizedDate.split('T')[0]; // Ensure YYYY-MM-DD format
+      }
+      
       const newGroup: RecoveryGroupMembership = {
         groupId: selectedProgramId,
-        recoveryDate,
+        recoveryDate: normalizedDate,
         isActive: true,
       };
       setTempProfile({
@@ -236,7 +260,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                 style={styles.input}
                 value={recoveryDate}
                 onChangeText={setRecoveryDate}
-                placeholder="Recovery date (YYYY-MM-DD)"
+                placeholder="Recovery date (MM/DD/YY or YYYY-MM-DD)"
                 placeholderTextColor={colors.gray[400]}
               />
               <NeuButton onPress={handleAddProgram} variant="default" style={styles.addButton}>

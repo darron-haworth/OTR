@@ -57,10 +57,13 @@ export const FriendCard: React.FC<FriendCardProps> = ({
                 const time = calculateTimeInRecovery(group.recoveryDate);
                 const milestone = getMilestoneBadge(time.days);
                 
+                // Calculate years for badge display
+                const years = Math.floor(time.days / 365);
+                const showYearsBadge = years > 1;
+                
                 // Format time consistently: show Years and Months for all friends
                 let timeDisplay = '';
                 if (time.days >= 365) {
-                  const years = Math.floor(time.days / 365);
                   const remainingDays = time.days % 365;
                   const months = Math.floor(remainingDays / 30);
                   if (months > 0) {
@@ -76,12 +79,18 @@ export const FriendCard: React.FC<FriendCardProps> = ({
                 }
 
                 return (
-                  <View key={index} style={styles.programPill}>
-                    <Text style={styles.programIcon}>{programInfo.icon}</Text>
-                    <Text style={styles.programTime}>{timeDisplay}</Text>
-                    {milestone && (
-                      <Text style={styles.programBadge}>{milestone.emoji}</Text>
-                    )}
+                  <View key={index} style={styles.programRow}>
+                    <View style={styles.programPill}>
+                      <Text style={styles.programIcon}>{programInfo.icon}</Text>
+                      <Text style={styles.programTime}>{timeDisplay}</Text>
+                      {milestone && (
+                        showYearsBadge ? (
+                          <Text style={styles.programBadge}></Text>
+                        ) : (
+                          <Text style={styles.programBadge}>{milestone.emoji}</Text>
+                        )
+                      )}
+                    </View>
                   </View>
                 );
               })}
@@ -94,7 +103,31 @@ export const FriendCard: React.FC<FriendCardProps> = ({
           )}
         </View>
         {onPress && (
-          <Text style={styles.chevron}>›</Text>
+          <View style={styles.rightSection}>
+            {friend.recoveryGroups.length > 0 && friend.recoveryGroups[0]?.recoveryDate && (
+              <Text style={styles.recoveryDateRight}>
+                {(() => {
+                  const formatRecoveryDate = (dateString: string): string => {
+                    try {
+                      const dateParts = dateString.split('-');
+                      if (dateParts.length === 3) {
+                        const year = parseInt(dateParts[0], 10);
+                        const month = parseInt(dateParts[1], 10) - 1;
+                        const day = parseInt(dateParts[2], 10);
+                        const localDate = new Date(year, month, day);
+                        return localDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      }
+                      return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    } catch {
+                      return dateString;
+                    }
+                  };
+                  return formatRecoveryDate(friend.recoveryGroups[0].recoveryDate);
+                })()}
+              </Text>
+            )}
+            <Text style={styles.chevron}>›</Text>
+          </View>
         )}
       </View>
     </Pressable>
@@ -121,15 +154,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: spacing.md,
   },
+  rightSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginLeft: spacing.sm,
+  },
   name: {
     ...typography.styles.body,
     fontWeight: '600',
     marginBottom: spacing.xs,
   },
   programs: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     flexWrap: 'wrap',
+    alignItems: 'flex-start',
+  },
+  programRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: spacing.xs,
+    width: '100%',
   },
   programPill: {
     flexDirection: 'row',
@@ -138,8 +183,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: borders.radius.full,
-    marginRight: spacing.xs,
-    marginBottom: spacing.xs,
+    marginRight: spacing.sm,
   },
   programIcon: {
     fontSize: 14,
@@ -153,6 +197,20 @@ const styles = StyleSheet.create({
   programBadge: {
     fontSize: 12,
     marginLeft: 4,
+    fontWeight: '600',
+  },
+  recoveryDate: {
+    ...typography.styles.caption,
+    fontSize: typography.fontSize.xs,
+    color: colors.gray[600],
+    textAlign: 'right',
+  },
+  recoveryDateRight: {
+    ...typography.styles.caption,
+    fontSize: typography.fontSize.xs,
+    color: colors.gray[600],
+    marginRight: spacing.xs,
+    marginTop: 2,
   },
   morePrograms: {
     ...typography.styles.caption,

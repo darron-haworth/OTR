@@ -26,9 +26,9 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
   onNavigateToProfile,
 }) => {
   const features = [
-    { icon: '🛡️', text: 'Complete Privacy', color: colors.primary },
-    { icon: '❤️', text: 'Supportive Community', color: colors.secondary },
-    { icon: '🏆', text: 'Track Milestones', color: colors.accent },
+    { icon: '🔒', text: 'Privacy First for Anonymity', color: colors.primary },
+    { icon: '❤️', text: 'Focus on Connection', color: colors.secondary },
+    { icon: '🎯', text: 'Milestone Tracking', color: colors.accent },
   ];
 
   return (
@@ -51,7 +51,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
                 end={gradients.warm.end}
                 style={styles.logoGradient}
               >
-                <Text style={styles.logoEmoji}>✨</Text>
+                <Text style={styles.logoEmoji}>⏰</Text>
               </LinearGradient>
             </View>
 
@@ -60,7 +60,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({
             </Text>
 
             <Text style={styles.subtitle}>
-              Your journey, your milestones, your community
+              Tracking your recovery and making connections with others in recovery.
             </Text>
           </View>
 

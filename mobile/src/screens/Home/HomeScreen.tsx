@@ -48,15 +48,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       return { days: 0, years: 0, months: 0, daysRemainder: 0, hours: 0 };
     }
     
-    try {
-      const start = new Date(recoveryDate);
-      const now = new Date();
-      
-      // Validate date
-      if (isNaN(start.getTime())) {
-        console.warn('Invalid recovery date:', recoveryDate);
-        return { days: 0, years: 0, months: 0, daysRemainder: 0, hours: 0 };
-      }
+      try {
+        // Parse date as local date to avoid timezone issues
+        const dateParts = recoveryDate.split('-');
+        let start: Date;
+        if (dateParts.length === 3) {
+          const year = parseInt(dateParts[0], 10);
+          const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+          const day = parseInt(dateParts[2], 10);
+          start = new Date(year, month, day);
+        } else {
+          start = new Date(recoveryDate);
+        }
+        const now = new Date();
+        
+        // Validate date
+        if (isNaN(start.getTime())) {
+          console.warn('Invalid recovery date:', recoveryDate);
+          return { days: 0, years: 0, months: 0, daysRemainder: 0, hours: 0 };
+        }
       
       const diffMs = now.getTime() - start.getTime();
       const totalDays = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
@@ -91,9 +101,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     });
   }, [friends]);
   
-  const publicName = profile.firstName && profile.lastName
-    ? `${profile.firstName} ${profile.lastName}`
-    : profile.publicName || 'You';
+      // Format name: if last name is longer than 1 char, show only last initial
+      const formatDisplayName = () => {
+        if (profile.firstName && profile.lastName) {
+          const lastInitial = profile.lastName.length > 1 
+            ? profile.lastName.charAt(0).toUpperCase()
+            : profile.lastName.toUpperCase();
+          return `${profile.firstName} ${lastInitial}`;
+        }
+        return profile.publicName || 'You';
+      };
+      const publicName = formatDisplayName();
   
   return (
     <SafeAreaView style={styles.container}>
@@ -116,7 +134,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   end={gradients.warm.end}
                   style={styles.logoGradient}
                 >
-                  <Text style={styles.logoEmoji}>✨</Text>
+                  <Text style={styles.logoEmoji}>⏰</Text>
                 </LinearGradient>
               </View>
               <Text style={styles.title}>
@@ -129,28 +147,53 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <GlassCard style={styles.profileCard}>
             <View style={styles.profileHeader}>
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>{publicName}</Text>
-                {primaryGroup && (
-                  <>
-                    <Text style={styles.profileProgram}>
-                      Program: {recoveryGroups[primaryGroup.groupId as keyof typeof recoveryGroups]?.name?.toUpperCase() || primaryGroup.groupId.toUpperCase()}
-                    </Text>
-                    {primaryGroup.recoveryDate && (
-                      <Text style={styles.profileRecoveryDate}>
-                        Recovery Date: {new Date(primaryGroup.recoveryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                <View style={styles.profileNameRow}>
+                  <Text style={styles.profileName}>{publicName}</Text>
+                  {primaryGroup && (
+                    <>
+                      <Text style={styles.profileName}> / </Text>
+                      <Text style={styles.profileProgram}>
+                        Program: <Text style={styles.profileProgramValue}>{recoveryGroups[primaryGroup.groupId as keyof typeof recoveryGroups]?.name?.toUpperCase() || primaryGroup.groupId.toUpperCase()}</Text>
                       </Text>
-                    )}
-                  </>
+                    </>
+                  )}
+                </View>
+                {primaryGroup && primaryGroup.recoveryDate && (
+                  <Text style={styles.profileRecoveryDate}>
+                    Recovery Date: {(() => {
+                      // Parse date string and create local date to avoid timezone issues
+                      const dateParts = primaryGroup.recoveryDate.split('-');
+                      if (dateParts.length === 3) {
+                        // YYYY-MM-DD format - create date in local timezone
+                        const year = parseInt(dateParts[0], 10);
+                        const month = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
+                        const day = parseInt(dateParts[2], 10);
+                        const localDate = new Date(year, month, day);
+                        return localDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      }
+                      // Fallback to original parsing
+                      return new Date(primaryGroup.recoveryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    })()}
+                  </Text>
                 )}
               </View>
             </View>
             
             {recoveryDate ? (
-              <View style={styles.milestoneRow}>
-                <Text style={styles.milestoneValue}>
-                  {(timeBreakdown.days || 0).toLocaleString()} Days Recovered
-                </Text>
-              </View>
+              <>
+                <View style={styles.milestoneRow}>
+                  <Text style={styles.milestoneValue}>
+                    {(timeBreakdown.days || 0).toLocaleString()} Days Recovered
+                  </Text>
+                </View>
+                {timeBreakdown.years > 0 && (
+                  <View style={styles.breakdownRow}>
+                    <Text style={styles.breakdownText}>
+                      {timeBreakdown.years} {timeBreakdown.years === 1 ? 'Year' : 'Years'}, {timeBreakdown.months} {timeBreakdown.months === 1 ? 'Month' : 'Months'}, {timeBreakdown.daysRemainder} {timeBreakdown.daysRemainder === 1 ? 'Day' : 'Days'}
+                    </Text>
+                  </View>
+                )}
+              </>
             ) : (
               <View style={styles.milestoneRow}>
                 <Text style={styles.noDateText}>No recovery date set</Text>
@@ -161,7 +204,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           {/* Friends Section */}
           <View style={styles.friendsSection}>
             <View style={styles.friendsHeader}>
-              <Text style={styles.friendsTitle}>Recovery Friends</Text>
+              <Text style={styles.friendsTitle}>My Recovery Friends</Text>
               <Pressable onPress={onNavigateToFriends}>
                 <Text style={styles.addFriendButton}>+ Add Friend</Text>
               </Pressable>
@@ -261,19 +304,27 @@ const styles = StyleSheet.create({
   profileInfo: {
     alignItems: 'center',
   },
+  profileNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
   profileName: {
     ...typography.styles.h4,
     fontSize: typography.fontSize.lg,
-    marginBottom: 2,
+    fontWeight: '700',
     textAlign: 'center',
   },
   profileProgram: {
     ...typography.styles.body,
     color: colors.gray[600],
     fontSize: typography.fontSize.xs,
-    fontWeight: '600',
+    fontWeight: '700',
     letterSpacing: 0.5,
-    marginBottom: 2,
+  },
+  profileProgramValue: {
+    fontWeight: '700',
   },
   profileRecoveryDate: {
     ...typography.styles.body,
@@ -346,6 +397,18 @@ const styles = StyleSheet.create({
     ...typography.styles.body,
     fontWeight: '700',
     color: colors.surface,
+  },
+  breakdownRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: spacing.xs,
+  },
+  breakdownText: {
+    ...typography.styles.body,
+    fontSize: typography.fontSize.sm,
+    color: colors.gray[600],
+    textAlign: 'center',
   },
 });
 
