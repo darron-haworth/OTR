@@ -2,14 +2,14 @@
  * OTR Milestone Tracker - Main App Component
  * 
  * Entry point for the React Native application
- * Handles initialization, encryption setup, and navigation
+ * Local storage is protected by app sandbox, no encryption needed
+ * Encryption will be added later for cloud backups only
  */
 
 import React from 'react';
 import { AppProvider, useApp } from './src/providers';
 import { AppNavigator } from './src/navigation';
 import { LoadingScreen } from './src/screens/Loading';
-import { EncryptionSetupScreen } from './src/screens/EncryptionSetup';
 
 /**
  * Main app content that uses the app context
@@ -19,7 +19,6 @@ function AppContent(): React.JSX.Element {
     profile,
     friends,
     isLoading,
-    isInitialized,
     updateProfile,
     addFriend,
     updateFriend,
@@ -31,12 +30,7 @@ function AppContent(): React.JSX.Element {
     return <LoadingScreen />;
   }
 
-  // Show encryption setup if not initialized
-  if (!isInitialized) {
-    return <EncryptionSetupScreen />;
-  }
-
-  // Show main app with navigation
+  // Show main app with navigation (no encryption setup needed)
   return (
     <AppNavigator
       initialProfile={profile || undefined}

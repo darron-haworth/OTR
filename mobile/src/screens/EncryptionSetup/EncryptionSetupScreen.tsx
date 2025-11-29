@@ -15,10 +15,10 @@ import {
   Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useApp } from '@/providers/AppProvider';
-import { NeuButton } from '@/components/common/NeuButton';
-import { GlassCard } from '@/components/common/GlassCard';
-import { colors, typography, spacing, borders, shadows, gradients } from '@/theme';
+import { useApp } from '../../providers';
+import { NeuButton } from '../../components/common/NeuButton';
+import { GlassCard } from '../../components/common/GlassCard';
+import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
 
 export const EncryptionSetupScreen: React.FC = () => {
   const { initializeEncryption } = useApp();

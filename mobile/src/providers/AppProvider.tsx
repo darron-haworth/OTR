@@ -20,7 +20,6 @@ interface AppContextType {
   profile: UserProfile | null;
   friends: Friend[];
   isLoading: boolean;
-  isInitialized: boolean;
   error: string | null;
   
   // Actions
@@ -28,7 +27,7 @@ interface AppContextType {
   addFriend: (friend: Omit<Friend, 'localId' | 'addedDate' | 'lastUpdated' | 'connectionStatus'>) => Promise<void>;
   updateFriend: (friend: Friend) => Promise<void>;
   deleteFriend: (friendId: string) => Promise<void>;
-  initializeEncryption: (passphrase: string) => Promise<void>;
+  initializeEncryption: (passphrase: string) => Promise<void>; // For future cloud backups
   refreshData: () => Promise<void>;
 }
 
@@ -40,10 +39,11 @@ export interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // Initialize services (singleton pattern)
-  // NOTE: cloudSync and backup are initialized but NOT used automatically
-  // They are available for future cloud features but make NO API calls by default
+  // NOTE: encryption, cloudSync and backup are initialized but NOT used automatically
+  // Encryption will be used later for cloud backups only
+  // Local storage is already protected by app sandbox
   const [encryption] = useState(() => new EncryptionService());
-  const [storage] = useState(() => new LocalStorageService(encryption));
+  const [storage] = useState(() => new LocalStorageService());
   const [cloudSync] = useState(() => new CloudSyncService(storage));
   const [backup] = useState(() => new BackupService(storage, encryption));
   
@@ -51,7 +51,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   /**
@@ -62,48 +61,38 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setIsLoading(true);
       setError(null);
       
-      // Check if encryption is initialized
-      const hasEncryption = await encryption.isInitialized();
-      if (!hasEncryption) {
-        setIsInitialized(false);
-        setIsLoading(false);
-        return;
-      }
-      
-      // Load profile and friends
+      // Load profile and friends (no encryption check needed for local storage)
       const loadedProfile = await storage.getUserProfile();
       const loadedFriends = await storage.getFriends();
       
       setProfile(loadedProfile);
       setFriends(loadedFriends || []);
-      setIsInitialized(true);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load data';
       console.error('Error loading data:', err);
       setError(errorMessage);
-      setIsInitialized(false);
     } finally {
       setIsLoading(false);
     }
-  }, [encryption, storage]);
+  }, [storage]);
   
   /**
    * Initialize encryption with passphrase
+   * NOTE: This will be used later for cloud backups only
+   * Local storage doesn't require encryption (protected by app sandbox)
    */
   const initializeEncryption = useCallback(async (passphrase: string) => {
     try {
       setError(null);
       await encryption.initializeMasterKey(passphrase);
-      setIsInitialized(true);
-      // Reload data after encryption is initialized
-      await loadData();
+      // Encryption initialized for future cloud backup use
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to initialize encryption';
       console.error('Error initializing encryption:', err);
       setError(errorMessage);
       throw err;
     }
-  }, [encryption, loadData]);
+  }, [encryption]);
   
   /**
    * Update user profile
@@ -211,7 +200,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     profile,
     friends,
     isLoading,
-    isInitialized,
     error,
     updateProfile,
     addFriend,

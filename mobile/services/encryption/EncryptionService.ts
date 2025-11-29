@@ -15,7 +15,7 @@ const KEYCHAIN_USERNAME = 'masterKey';
 export interface EncryptedData {
   iv: string;
   ciphertext: string;
-  authTag?: string; // For GCM mode
+  authTag?: string; // HMAC for authentication (using CBC mode)
 }
 
 export class EncryptionService {
@@ -64,32 +64,36 @@ export class EncryptionService {
   }
 
   /**
-   * Encrypt data using AES-256-GCM
+   * Encrypt data using AES-256-CBC (GCM not available in crypto-js)
+   * Using CBC mode with HMAC for authentication
    */
   async encrypt(plaintext: string): Promise<string> {
     const masterKey = await this.getMasterKey();
     const key = CryptoJS.enc.Hex.parse(masterKey);
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
 
-    // Use AES-256 in GCM mode for authenticated encryption
+    // Use AES-256 in CBC mode (GCM is not available in crypto-js)
     const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
       iv: iv,
-      mode: CryptoJS.mode.GCM,
+      mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7,
     });
 
-    // Return IV + Ciphertext + AuthTag as JSON string
+    // Generate HMAC for authentication
+    const hmac = CryptoJS.HmacSHA256(encrypted.ciphertext.toString(), key);
+
+    // Return IV + Ciphertext + HMAC as JSON string
     const encryptedData: EncryptedData = {
       iv: iv.toString(CryptoJS.enc.Hex),
       ciphertext: encrypted.ciphertext.toString(),
-      authTag: encrypted.tag ? encrypted.tag.toString(CryptoJS.enc.Hex) : undefined,
+      authTag: hmac.toString(CryptoJS.enc.Hex), // Using HMAC instead of GCM auth tag
     };
 
     return JSON.stringify(encryptedData);
   }
 
   /**
-   * Decrypt data with integrity verification
+   * Decrypt data with integrity verification using HMAC
    */
   async decrypt(encryptedDataJson: string): Promise<string> {
     try {
@@ -97,17 +101,24 @@ export class EncryptionService {
       const key = CryptoJS.enc.Hex.parse(masterKey);
       const encryptedData: EncryptedData = JSON.parse(encryptedDataJson);
 
-      // Decrypt using AES-256-GCM
+      // Verify HMAC before decrypting
+      if (encryptedData.authTag) {
+        const expectedHmac = CryptoJS.HmacSHA256(encryptedData.ciphertext, key);
+        const providedHmac = CryptoJS.enc.Hex.parse(encryptedData.authTag);
+        
+        if (expectedHmac.toString() !== providedHmac.toString()) {
+          throw new Error('HMAC verification failed - data may have been tampered with');
+        }
+      }
+
+      // Decrypt using AES-256-CBC
       const decrypted = CryptoJS.AES.decrypt(
         encryptedData.ciphertext,
         key,
         {
           iv: CryptoJS.enc.Hex.parse(encryptedData.iv),
-          mode: CryptoJS.mode.GCM,
+          mode: CryptoJS.mode.CBC,
           padding: CryptoJS.pad.Pkcs7,
-          tag: encryptedData.authTag
-            ? CryptoJS.enc.Hex.parse(encryptedData.authTag)
-            : undefined,
         }
       );
 

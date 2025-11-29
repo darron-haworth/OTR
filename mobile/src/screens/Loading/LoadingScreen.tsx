@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { colors, typography, spacing } from '@/theme';
+import { colors, typography, spacing } from '../../theme';
 
 export const LoadingScreen: React.FC = () => {
   return (
