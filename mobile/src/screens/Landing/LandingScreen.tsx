@@ -14,9 +14,9 @@ import {
   StatusBar,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { GlassCard } from '@/components/common/GlassCard';
-import { NeuButton } from '@/components/common/NeuButton';
-import { colors, typography, spacing, borders, shadows, gradients } from '@/theme';
+import { GlassCard } from '../../components/common/GlassCard';
+import { NeuButton } from '../../components/common/NeuButton';
+import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
 
 export interface LandingScreenProps {
   onNavigateToProfile: () => void;

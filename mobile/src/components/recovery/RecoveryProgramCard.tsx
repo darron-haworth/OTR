@@ -6,13 +6,13 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
-import { colors, borders, spacing, typography, shadows } from '@/theme';
-import { recoveryGroups } from '@/theme';
+import { colors, borders, spacing, typography, shadows } from '../../theme';
+import { recoveryGroups } from '../../theme';
 import { RecoveryTimeDisplay } from './RecoveryTimeDisplay';
 import { MilestoneBadge } from '../common/MilestoneBadge';
-import { calculateTimeInRecovery } from '@/utils/timeCalculations';
-import { getMilestoneForDate } from '@/utils/milestoneHelpers';
-import type { RecoveryGroupMembership } from '@/types/entities/UserProfile';
+import { calculateTimeInRecovery } from '../../utils/timeCalculations';
+import { getMilestoneForDate } from '../../utils/milestoneHelpers';
+import type { RecoveryGroupMembership } from '../../types/entities/UserProfile';
 
 export interface RecoveryProgramCardProps {
   program: RecoveryGroupMembership;

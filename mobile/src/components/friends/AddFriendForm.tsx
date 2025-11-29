@@ -6,12 +6,12 @@
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, ViewStyle } from 'react-native';
-import { colors, borders, spacing, typography, shadows } from '@/theme';
+import { colors, borders, spacing, typography, shadows } from '../../theme';
 import { GlassCard } from '../common/GlassCard';
 import { NeuButton } from '../common/NeuButton';
 import { ProgramSelector } from '../recovery/ProgramSelector';
 import { RecoveryProgramCard } from '../recovery/RecoveryProgramCard';
-import type { RecoveryGroupMembership } from '@/types/entities/UserProfile';
+import type { RecoveryGroupMembership } from '../../types/entities/UserProfile';
 
 export interface AddFriendFormProps {
   onSubmit: (data: {

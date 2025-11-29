@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle, ActivityIndicator } from 'react-native';
-import { colors, borders, shadows, spacing, typography } from '@/theme';
+import { colors, borders, shadows, spacing, typography } from '../../theme';
 
 export interface NeuButtonProps {
   onPress: () => void;

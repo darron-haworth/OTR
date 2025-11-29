@@ -6,8 +6,8 @@
 
 import React, { useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet, ScrollView, ViewStyle } from 'react-native';
-import { colors, borders, spacing, typography, shadows } from '@/theme';
-import { recoveryGroups } from '@/theme';
+import { colors, borders, spacing, typography, shadows } from '../../theme';
+import { recoveryGroups } from '../../theme';
 
 export interface ProgramSelectorProps {
   selectedProgramId?: string;

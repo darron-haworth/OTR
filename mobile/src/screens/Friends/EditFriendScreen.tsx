@@ -17,16 +17,16 @@ import {
   Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { GlassCard } from '@/components/common/GlassCard';
-import { NeuButton } from '@/components/common/NeuButton';
-import { MilestoneBadge } from '@/components/common/MilestoneBadge';
-import { RecoveryProgramCard } from '@/components/recovery/RecoveryProgramCard';
-import { ProgramSelector } from '@/components/recovery/ProgramSelector';
-import { FriendAvatar } from '@/components/friends/FriendAvatar';
-import { colors, typography, spacing, borders, shadows, gradients } from '@/theme';
-import { calculateTimeInRecovery } from '@/utils/timeCalculations';
-import { getMilestoneForDate } from '@/utils/milestoneHelpers';
-import type { Friend, RecoveryGroupMembership } from '@/types/entities/Friend';
+import { GlassCard } from '../../components/common/GlassCard';
+import { NeuButton } from '../../components/common/NeuButton';
+import { MilestoneBadge } from '../../components/common/MilestoneBadge';
+import { RecoveryProgramCard } from '../../components/recovery/RecoveryProgramCard';
+import { ProgramSelector } from '../../components/recovery/ProgramSelector';
+import { FriendAvatar } from '../../components/friends/FriendAvatar';
+import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
+import { calculateTimeInRecovery } from '../../utils/timeCalculations';
+import { getMilestoneForDate } from '../../utils/milestoneHelpers';
+import type { Friend, RecoveryGroupMembership } from '../../types/entities/Friend';
 
 export interface EditFriendScreenProps {
   friend: Friend;

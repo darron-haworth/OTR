@@ -6,9 +6,9 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TextStyle, ViewStyle } from 'react-native';
-import { colors, typography } from '@/theme';
-import { formatTimeInRecovery, calculateTimeInRecovery } from '@/utils/timeCalculations';
-import { getMilestoneForDate } from '@/utils/milestoneHelpers';
+import { colors, typography } from '../../theme';
+import { formatTimeInRecovery, calculateTimeInRecovery } from '../../utils/timeCalculations';
+import { getMilestoneForDate } from '../../utils/milestoneHelpers';
 import { MilestoneBadge } from '../common/MilestoneBadge';
 
 export interface RecoveryTimeDisplayProps {

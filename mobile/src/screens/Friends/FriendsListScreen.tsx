@@ -15,11 +15,11 @@ import {
   Pressable,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { FriendCard } from '@/components/friends/FriendCard';
-import { AddFriendForm } from '@/components/friends/AddFriendForm';
-import { NeuButton } from '@/components/common/NeuButton';
-import { colors, typography, spacing, borders, shadows, gradients } from '@/theme';
-import type { Friend, RecoveryGroupMembership } from '@/types/entities/Friend';
+import { FriendCard } from '../../components/friends/FriendCard';
+import { AddFriendForm } from '../../components/friends/AddFriendForm';
+import { NeuButton } from '../../components/common/NeuButton';
+import { colors, typography, spacing, borders, shadows, gradients } from '../../theme';
+import type { Friend, RecoveryGroupMembership } from '../../types/entities/Friend';
 
 export interface FriendsListScreenProps {
   friends: Friend[];

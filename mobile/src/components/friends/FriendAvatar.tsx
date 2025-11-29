@@ -7,12 +7,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { colors, borders, shadows, typography } from '@/theme';
-import { gradients } from '@/theme';
+import { colors, borders, shadows, typography } from '../../theme';
+import { gradients } from '../../theme';
 import { MilestoneBadge } from '../common/MilestoneBadge';
-import { calculateTimeInRecovery } from '@/utils/timeCalculations';
-import { getMilestoneForDate } from '@/utils/milestoneHelpers';
-import type { RecoveryGroupMembership } from '@/types/entities/UserProfile';
+import { calculateTimeInRecovery } from '../../utils/timeCalculations';
+import { getMilestoneForDate } from '../../utils/milestoneHelpers';
+import type { RecoveryGroupMembership } from '../../types/entities/UserProfile';
 
 export interface FriendAvatarProps {
   name: string;

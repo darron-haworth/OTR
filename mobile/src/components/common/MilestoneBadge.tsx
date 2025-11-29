@@ -6,8 +6,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, ViewStyle } from 'react-native';
-import { colors, borders, shadows } from '@/theme';
-import { getMilestoneBadge } from '@/utils/milestoneHelpers';
+import { colors, borders, shadows } from '../../theme';
+import { getMilestoneBadge } from '../../utils/milestoneHelpers';
 
 export interface MilestoneBadgeProps {
   days: number;
