@@ -5,4 +5,5 @@
 
 export * from './timeCalculations';
 export * from './milestoneHelpers';
+export * from './profileHelpers';
 
